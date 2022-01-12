@@ -29,8 +29,8 @@ static GMutex g_mutex;
 
 
 const char PIPE_LINE[] = "videotestsrc pattern=snow ! video/x-raw,width=640,height=480,framerate=30/1 !  \
- omxh264enc target-bitrate=2000000 control-rate=variable ! video/x-h264,profile=high ! queue max-size-bytes=1000000 \
- ! h264parse ! queue max-size-bytes=1000000 ! rtph264pay config-interval=-1 ssrc=111 pt=102 seqnum-offset=0 timestamp-offset=0 mtu=1000 ! appsink max_buffers=2 drop=true  name=pear-sink";
+ omxh264enc target-bitrate=2000000 control-rate=variable ! video/x-h264,profile=high !\
+  h264parse ! rtph264pay config-interval=-1 ssrc=111 pt=102 seqnum-offset=0 timestamp-offset=0 mtu=1000 ! appsink max_buffers=2 drop=true  name=app-sink";
 
 
 
@@ -127,7 +127,7 @@ int main(int argc, char **argv)
 	GstElement *pear_sink;
 	gst_init(&argc, &argv);
 	gst_element = gst_parse_launch(PIPE_LINE, NULL);
-  	pear_sink = gst_bin_get_by_name(GST_BIN(gst_element), "pear-sink");
+  	pear_sink = gst_bin_get_by_name(GST_BIN(gst_element), "app-sink");
   	g_signal_connect(pear_sink, "new-sample", G_CALLBACK(new_sample), NULL);
   	g_object_set(pear_sink, "emit-signals", TRUE, NULL);
 
